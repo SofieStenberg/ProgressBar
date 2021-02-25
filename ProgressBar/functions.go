@@ -38,6 +38,9 @@ import (
 
 //  API, installer
 
+// Use instead of divide by 60 as multiplication is faster than division.
+const inverseSixty float64 = 0.01666666666666666666666666666667
+
 // ProgressBar is the struct containing the parameters for the progress bar
 type ProgressBar struct {
 	percent       float64       // The percentage of the progress.
@@ -154,7 +157,7 @@ func (b *ProgressBar) Update(i int) {
 		}
 	}
 
-	// Converts the variable Legth along with the length of the colordeclaration to a string so it can be used in the below printf.
+	// Converts the variable Legth along and add 21 to a string so it can be used in the below printf to get the rith length of the bar.
 	var l string
 	l = strconv.Itoa(b.Length + 21)
 
@@ -166,14 +169,15 @@ func (b *ProgressBar) Update(i int) {
 	tot := color.HEX(b.TotalColor, false).Sprint(b.Total)
 
 	if e.Seconds() > 60.00 {
-		min := e.Seconds() / 60
+
+		min := e.Seconds() * inverseSixty
 		sec := int(e.Seconds()) % 60
 		estTime := color.HEX(b.EstimatedColor, false).Sprintf("estimated time: %.0fmin %ds ", min, sec)
 		fmt.Printf("\r %s |%-"+l+"s|%s%% %s/%s estimated time: %.2fmin  ", desc, gra, per, cur, tot, estTime)
 	} else {
 		if e.Seconds() >= 0 {
 			estTime := color.HEX(b.EstimatedColor, false).Sprintf("estimated time: %0.1fs ", e.Seconds())
-			color.Printf("\r %s |%-"+l+"s|%s%% %s/%s %s                                    ", desc, gra, per, cur, tot, estTime)
+			color.Printf("\r %s |%-"+l+"s|%s%% %s/%s %s ", desc, gra, per, cur, tot, estTime)
 		}
 	}
 
@@ -192,7 +196,7 @@ func (b *ProgressBar) Update(i int) {
 
 	////////////////////The pipeline-solution is used exactly as the progressbar above by the user///////////////////////////////
 
-	//////////////The only difference is that yhe user calls 'instance.UpdatePipeline' instead of 'instance.Update'/////////////
+	//////////////The only difference is that the user calls 'instance.UpdatePipeline' instead of 'instance.Update'/////////////
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 */
@@ -254,14 +258,14 @@ func (b *ProgressBar) receive(ch <-chan int) {
 		tot := color.HEX(b.TotalColor, false).Sprint(b.Total)
 
 		if e.Seconds() > 60.00 {
-			min := e.Seconds() / 60
+			min := e.Seconds() * inverseSixty
 			sec := int(e.Seconds()) % 60
 			estTime := color.HEX(b.EstimatedColor, false).Sprintf("estimated time: %.0fmin %ds ", min, sec)
-			fmt.Printf("\r %s |%-"+l+"s|%s%% %s/%s estimated time: %.2fmin  ", desc, gra, per, cur, tot, estTime)
+			fmt.Printf("\r %s |%-"+l+"s|%s%% %s/%s estimated time: %.2fmin ", desc, gra, per, cur, tot, estTime)
 		} else {
 			if e.Seconds() >= 0 {
 				estTime := color.HEX(b.EstimatedColor, false).Sprintf("estimated time: %0.1fs ", e.Seconds())
-				color.Printf("\r %s |%-"+l+"s|%s%% %s/%s %s                                    ", desc, gra, per, cur, tot, estTime)
+				color.Printf("\r %s |%-"+l+"s|%s%% %s/%s %s", desc, gra, per, cur, tot, estTime)
 			}
 		}
 
