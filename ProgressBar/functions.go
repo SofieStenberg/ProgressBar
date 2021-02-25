@@ -78,6 +78,7 @@ func Default(b *ProgressBar, n int) {
 	b.estimatedTime = 0
 	b.elapsedTime = 0
 	b.startTime.IsZero()
+
 	b.DescriptionColor = "#44cef6"
 	b.GraphColor = "#0eb83a"
 	b.PercentColor = "#c3272b"
@@ -160,11 +161,11 @@ func (b *ProgressBar) Update(i int) {
 	l = strconv.Itoa(b.Length + 21)
 
 	// Sets the color to the right parameters.
-	desc := color.HEX(b.DescriptionColor, false).Sprintf(b.Description)
-	gra := color.HEX(b.GraphColor, false).Sprintf(b.Graph)
-	per := color.HEX(b.PercentColor, false).Sprintf("%d", int(b.percent))
-	cur := color.HEX(b.CurrentColor, false).Sprintf("%d", b.Current)
-	tot := color.HEX(b.TotalColor, false).Sprintf("%d", b.Total)
+	desc := color.HEX(b.DescriptionColor, false).Sprint(b.Description)
+	gra := color.HEX(b.GraphColor, false).Sprint(b.Graph)
+	per := color.HEX(b.PercentColor, false).Sprint(int(b.percent))
+	cur := color.HEX(b.CurrentColor, false).Sprint(b.Current)
+	tot := color.HEX(b.TotalColor, false).Sprint(b.Total)
 
 	if e.Seconds() > 60.00 {
 		min := e.Seconds() / 60
@@ -245,14 +246,14 @@ func (b *ProgressBar) receive(ch <-chan int) {
 
 		// Converts the variable Legth along with the length of the color-declaration to a string so it can be used in the below printf
 		var l string
-		l = strconv.Itoa(b.Length + 21)
+		l = strconv.Itoa(b.Length + 21 /*21*/)
 
 		// Sets the color to the right parameters.
-		desc := color.HEX(b.DescriptionColor, false).Sprintf(b.Description)
-		gra := color.HEX(b.GraphColor, false).Sprintf(b.Graph)
-		per := color.HEX(b.PercentColor, false).Sprintf("%d", int(b.percent))
-		cur := color.HEX(b.CurrentColor, false).Sprintf("%d", b.Current)
-		tot := color.HEX(b.TotalColor, false).Sprintf("%d", b.Total)
+		desc := color.HEX(b.DescriptionColor, false).Sprint(b.Description)
+		gra := color.HEX(b.GraphColor, false).Sprint(b.Graph)
+		per := color.HEX(b.PercentColor, false).Sprint(int(b.percent))
+		cur := color.HEX(b.CurrentColor, false).Sprint(b.Current)
+		tot := color.HEX(b.TotalColor, false).Sprint(b.Total)
 
 		if e.Seconds() > 60.00 {
 			min := e.Seconds() / 60

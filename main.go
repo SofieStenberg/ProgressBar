@@ -13,7 +13,7 @@ func main() {
 	b.Description = "Foor-loop 100"
 	//b.Length = 25
 	for i := 0; i <= b.Total; i++ {
-		time.Sleep(5 * time.Millisecond)
+		time.Sleep(5 * time.Nanosecond)
 
 		// At the end of each iteration, we update the progress bar.
 		b.Update(i)
@@ -27,14 +27,14 @@ func main() {
 	b.DescriptionColor = "#845a33"
 	for i := 0; i <= b.Total; i++ {
 
-		time.Sleep(5 * time.Millisecond)
+		time.Sleep(5 * time.Nanosecond)
 		b.UpdatePipeline(1)
 	}
 
 	b.Reset(500)
 	b.Description = "Foor-loop 500"
 	for i := 0; i <= b.Total; i++ {
-		time.Sleep(1 * time.Millisecond)
+		time.Sleep(1 * time.Nanosecond)
 
 		b.Update(i)
 	}
@@ -44,14 +44,14 @@ func main() {
 	b.Char = "@"
 	for i := 0; i <= b.Total; i++ {
 
-		time.Sleep(1 * time.Millisecond)
+		time.Sleep(1 * time.Nanosecond)
 		b.UpdatePipeline(1)
 	}
 
 	b.Reset(1000)
 	b.Description = "Foor-loop 1'000"
 	for i := 0; i <= b.Total; i++ {
-		time.Sleep(1 * time.Millisecond)
+		time.Sleep(1 * time.Nanosecond)
 		b.Update(i)
 	}
 
@@ -59,7 +59,7 @@ func main() {
 	b.Description = "Pipeline 1'000"
 	b.Char = "@"
 	for i := 0; i <= b.Total; i++ {
-		time.Sleep(1 * time.Millisecond)
+		time.Sleep(1 * time.Nanosecond)
 		b.UpdatePipeline(1)
 	}
 	/*
@@ -68,27 +68,27 @@ func main() {
 		for i := 0; i <= b.Total; i++ {
 			b.Update(i)
 		}
-	*/
-	b.Reset(10000)
-	b.Description = "Pipeline 10'000"
-	b.Char = "@"
-	for i := 0; i <= b.Total; i++ {
-		b.UpdatePipeline(1)
-	}
-	/*
+
+		b.Reset(10000)
+		b.Description = "Pipeline 10'000"
+		b.Char = "@"
+		for i := 0; i <= b.Total; i++ {
+			b.UpdatePipeline(1)
+		}
+
 		b.Reset(100000)
 		b.Description = "Foor-loop 100'000"
 		for i := 0; i <= b.Total; i++ {
 			b.Update(i)
 		}
-	*/
-	b.Reset(100000)
-	b.Description = "Pipeline 100'000"
-	b.Char = "@"
-	for i := 0; i <= b.Total; i++ {
-		b.UpdatePipeline(1)
-	}
 
+		b.Reset(100000)
+		b.Description = "Pipeline 100'000"
+		b.Char = "@"
+		for i := 0; i <= b.Total; i++ {
+			b.UpdatePipeline(1)
+		}
+	*/
 	////////////////////////////////////////////////////
 	/*
 		b.Reset(1000000)
