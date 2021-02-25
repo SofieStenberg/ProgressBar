@@ -53,7 +53,6 @@ type ProgressBar struct {
 	estimatedTime time.Duration // Used to get an estimated time of how long time is left of the progress
 	isRunning     bool          //	Used to know when to start the timer
 
-	colorLength int // Stores the number of characters used to declare a color.
 	// The below variables is for holding the HEX-value in order to get a colored output
 	DescriptionColor string
 	CurrentColor     string
@@ -86,7 +85,6 @@ func Default(b *ProgressBar, n int) {
 	b.TotalColor = "#4b5cc4"
 	b.EstimatedColor = "#ff7500"
 	b.ElapsedColor = "#d9b611"
-	b.colorLength = len(color.FgCyan.Render(""))
 
 }
 
