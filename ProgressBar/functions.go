@@ -29,7 +29,6 @@ import (
 	If you want to change color on the description output, simple do: instance.DescriptionColor = "HEX-value".
 	Remember, the hex-value must be a string and start with #. All the variables that you can change the color for, ends with xxxColor
 */
-
 // Used instead of divide by 60 as multiplication is faster than division.
 const inverseSixty float64 = 0.01666666666666666666666666666667
 

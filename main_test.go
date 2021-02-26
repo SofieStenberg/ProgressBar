@@ -5,10 +5,9 @@
 package main
 
 import (
+	progressbar "progressbar/ProgressBar"
 	"testing"
 	"time"
-
-	progressbar "github.com/SofieStenberg/ProgressBar/ProgressBar"
 )
 
 func TestNorm100(t *testing.T) {
