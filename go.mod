@@ -1,6 +1,3 @@
-// Sofie Stenberg
-// sose18
-
 module progressbar
 
 go 1.15

@@ -1,8 +1,3 @@
-/*
-	Sofie Stenberg
-	sose18
-*/
-
 // Package progressbar contains struct and functions for the progress bar
 package progressbar
 
@@ -35,9 +30,7 @@ import (
 	Remember, the hex-value must be a string and start with #. All the variables that you can change the color for, ends with xxxColor
 */
 
-//  API, installer
-
-// Use instead of divide by 60 as multiplication is faster than division.
+// Used instead of divide by 60 as multiplication is faster than division.
 const inverseSixty float64 = 0.01666666666666666666666666666667
 
 // ProgressBar is the struct containing the parameters for the progress bar
@@ -68,7 +61,7 @@ type ProgressBar struct {
 // Default values for the variables in the struct ProgressBar.
 func Default(b *ProgressBar, n int) {
 	b.percent = 0
-	b.Current = -1
+	b.Current = 0
 	b.Total = n
 	b.totalInverse = 1.0 / float64(b.Total)
 	b.Char = "█"
@@ -122,7 +115,16 @@ func (b *ProgressBar) estimation() time.Duration {
 	return time.Duration(int64(timeLeft))
 }
 
-// Update is the function that actually updates and draws the progressbar.
+func stopTime(b *ProgressBar) {
+
+	if b.Current == b.Total {
+		b.elapsedTime = time.Since(b.startTime)
+		color.HEX(b.ElapsedColor, false).Println("\nTime elapsed: ", b.elapsedTime, "\n")
+		b.isRunning = false
+	}
+}
+
+// Update is the function that updates the current state of the progress bar.
 func (b *ProgressBar) Update(i int) {
 	// Uppdate the 'Current'-parameter with the value of the iteration in the loop
 	b.Current = i
@@ -133,14 +135,20 @@ func (b *ProgressBar) Update(i int) {
 		b.isRunning = true
 	}
 
-	drawGraph(b)
+	uppdateBar(b)
+	drawBar(b)
 
+	// If the process is att 100%, a.k.a finished, the timer stops.
+	if b.Current == b.Total {
+		stopTime(b)
+	}
 }
 
-func drawGraph(b *ProgressBar) {
+// uppdateBar is the function that draws the progressbar to the terminal.
+func uppdateBar(b *ProgressBar) {
 	// Calculation of the current progress in percent.
 	b.percent = calculatePercent(b)
-	e := b.estimation()
+	//e := b.estimation()
 	var percent float64
 
 	// As long the 'Percent'-parameter is below 100%, we update the bar.
@@ -159,35 +167,34 @@ func drawGraph(b *ProgressBar) {
 		for i := 0; i < progressSinceLast; i++ {
 			b.Graph += b.Char
 		}
+	}
+}
 
-		// Converts the variable Legth along and add 21 to a string so it can be used in the below printf to get the rith length of the bar.
-		var l string
-		l = strconv.Itoa(b.Length + 21)
+func drawBar(b *ProgressBar) {
+	// Get the estimated time left of the progress.
+	e := b.estimation()
+	// Converts the variable Legth + 21 to a string so it can be used in the below printf to get the right length of the bar.
+	l := strconv.Itoa(b.Length + 21)
 
-		// Sets the color to the right parameters.
-		desc := color.HEX(b.DescriptionColor, false).Sprint(b.Description)
-		gra := color.HEX(b.GraphColor, false).Sprint(b.Graph)
-		per := color.HEX(b.PercentColor, false).Sprint(int(b.percent))
-		cur := color.HEX(b.CurrentColor, false).Sprint(b.Current)
-		tot := color.HEX(b.TotalColor, false).Sprint(b.Total)
+	// Sets the color to the right parameters.
+	desc := color.HEX(b.DescriptionColor, false).Sprint(b.Description)
+	gra := color.HEX(b.GraphColor, false).Sprint(b.Graph)
+	per := color.HEX(b.PercentColor, false).Sprint(int(b.percent))
+	cur := color.HEX(b.CurrentColor, false).Sprint(b.Current)
+	tot := color.HEX(b.TotalColor, false).Sprint(b.Total)
 
-		if e.Seconds() > 60.00 {
-			min := e.Seconds() * inverseSixty
-			sec := int(e.Seconds()) % 60
-			estTime := color.HEX(b.EstimatedColor, false).Sprintf("estimated time: %.0fmin %ds ", min, sec)
+	if e.Seconds() > 60.00 {
+		// If over a minute we need to calculate the exact minirues and seconds in order
+		// to get the rith output before we sett the color to this parameter.
+		min := e.Seconds() * inverseSixty
+		sec := int(e.Seconds()) % 60
+		estTime := color.HEX(b.EstimatedColor, false).Sprintf("estimated time: %.0fmin %ds ", min, sec)
+		color.Printf("\r %s |%-"+l+"s|%s%% %s/%s %s ", desc, gra, per, cur, tot, estTime)
+	} else {
+		if e.Seconds() >= 0 {
+			// If the time left is under a minute, the color is set to the parameter without further ado
+			estTime := color.HEX(b.EstimatedColor, false).Sprintf("estimated time: %0.1fs ", e.Seconds())
 			color.Printf("\r %s |%-"+l+"s|%s%% %s/%s %s ", desc, gra, per, cur, tot, estTime)
-		} else {
-			if e.Seconds() >= 0 {
-				estTime := color.HEX(b.EstimatedColor, false).Sprintf("estimated time: %0.1fs ", e.Seconds())
-				color.Printf("\r %s |%-"+l+"s|%s%% %s/%s %s ", desc, gra, per, cur, tot, estTime)
-			}
-		}
-
-		// If the process is att 100%, a.k.a finished, the timer stops.
-		if b.Current == b.Total {
-			b.elapsedTime = time.Since(b.startTime)
-			color.HEX(b.ElapsedColor, false).Println("\nTime elapsed: ", b.elapsedTime, "\n")
-			b.isRunning = false
 		}
 	}
 }
@@ -201,11 +208,11 @@ func drawGraph(b *ProgressBar) {
 
 	//////////////The only difference is that the user calls 'instance.UpdatePipeline' instead of 'instance.Update'/////////////
 
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 */
 
 // UpdatePipeline is the function called when the user wants to use the progressbar
-// that is implemented with pipeline
+// that is implemented with pipeline. It sends the updated progress through a channel
 func (b *ProgressBar) UpdatePipeline(i int) {
 	out := make(chan int)
 	go func() {
@@ -215,10 +222,11 @@ func (b *ProgressBar) UpdatePipeline(i int) {
 	b.receive(out)
 }
 
-// receive is the function that updates and draws the progressbar that uses pipelines.
+// receive is the function that updates the current state of the progress based on the value sent from the channel.
+// It then calls the function to draw the grahp.
 func (b *ProgressBar) receive(ch <-chan int) {
 	n := <-ch
-	b.Current += n
+	b.Current = n
 
 	go func() {
 		if !b.isRunning {
@@ -227,6 +235,11 @@ func (b *ProgressBar) receive(ch <-chan int) {
 		}
 	}()
 
-	drawGraph(b)
+	uppdateBar(b)
+	drawBar(b)
 
+	// If the process is att 100%, a.k.a finished, the timer stops.
+	if b.Current == b.Total {
+		stopTime(b)
+	}
 }
