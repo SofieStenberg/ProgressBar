@@ -7,7 +7,6 @@
 package progressbar
 
 import (
-	"fmt"
 	"math"
 	"strconv"
 	"time"
@@ -134,6 +133,11 @@ func (b *ProgressBar) Update(i int) {
 		b.isRunning = true
 	}
 
+	drawGraph(b)
+
+}
+
+func drawGraph(b *ProgressBar) {
 	// Calculation of the current progress in percent.
 	b.percent = calculatePercent(b)
 	e := b.estimation()
@@ -155,37 +159,36 @@ func (b *ProgressBar) Update(i int) {
 		for i := 0; i < progressSinceLast; i++ {
 			b.Graph += b.Char
 		}
-	}
 
-	// Converts the variable Legth along and add 21 to a string so it can be used in the below printf to get the rith length of the bar.
-	var l string
-	l = strconv.Itoa(b.Length + 21)
+		// Converts the variable Legth along and add 21 to a string so it can be used in the below printf to get the rith length of the bar.
+		var l string
+		l = strconv.Itoa(b.Length + 21)
 
-	// Sets the color to the right parameters.
-	desc := color.HEX(b.DescriptionColor, false).Sprint(b.Description)
-	gra := color.HEX(b.GraphColor, false).Sprint(b.Graph)
-	per := color.HEX(b.PercentColor, false).Sprint(int(b.percent))
-	cur := color.HEX(b.CurrentColor, false).Sprint(b.Current)
-	tot := color.HEX(b.TotalColor, false).Sprint(b.Total)
+		// Sets the color to the right parameters.
+		desc := color.HEX(b.DescriptionColor, false).Sprint(b.Description)
+		gra := color.HEX(b.GraphColor, false).Sprint(b.Graph)
+		per := color.HEX(b.PercentColor, false).Sprint(int(b.percent))
+		cur := color.HEX(b.CurrentColor, false).Sprint(b.Current)
+		tot := color.HEX(b.TotalColor, false).Sprint(b.Total)
 
-	if e.Seconds() > 60.00 {
-
-		min := e.Seconds() * inverseSixty
-		sec := int(e.Seconds()) % 60
-		estTime := color.HEX(b.EstimatedColor, false).Sprintf("estimated time: %.0fmin %ds ", min, sec)
-		fmt.Printf("\r %s |%-"+l+"s|%s%% %s/%s estimated time: %.2fmin  ", desc, gra, per, cur, tot, estTime)
-	} else {
-		if e.Seconds() >= 0 {
-			estTime := color.HEX(b.EstimatedColor, false).Sprintf("estimated time: %0.1fs ", e.Seconds())
+		if e.Seconds() > 60.00 {
+			min := e.Seconds() * inverseSixty
+			sec := int(e.Seconds()) % 60
+			estTime := color.HEX(b.EstimatedColor, false).Sprintf("estimated time: %.0fmin %ds ", min, sec)
 			color.Printf("\r %s |%-"+l+"s|%s%% %s/%s %s ", desc, gra, per, cur, tot, estTime)
+		} else {
+			if e.Seconds() >= 0 {
+				estTime := color.HEX(b.EstimatedColor, false).Sprintf("estimated time: %0.1fs ", e.Seconds())
+				color.Printf("\r %s |%-"+l+"s|%s%% %s/%s %s ", desc, gra, per, cur, tot, estTime)
+			}
 		}
-	}
 
-	// If the process is att 100% (a.k.a finished), the timer stops.
-	if b.Current == b.Total {
-		b.elapsedTime = time.Since(b.startTime)
-		color.HEX(b.ElapsedColor, false).Println("\nTime elapsed: ", b.elapsedTime, "\n")
-		b.isRunning = false
+		// If the process is att 100%, a.k.a finished, the timer stops.
+		if b.Current == b.Total {
+			b.elapsedTime = time.Since(b.startTime)
+			color.HEX(b.ElapsedColor, false).Println("\nTime elapsed: ", b.elapsedTime, "\n")
+			b.isRunning = false
+		}
 	}
 }
 
@@ -224,56 +227,6 @@ func (b *ProgressBar) receive(ch <-chan int) {
 		}
 	}()
 
-	// Calculation of the current progress in percent.
-	b.percent = calculatePercent(b)
-	e := b.estimation()
-	var percent float64
+	drawGraph(b)
 
-	// As long the 'percent'-parameter is below 100%, we update the bar.
-	if b.percent <= 100 {
-		// Calculates how many chars to update the bar with based on the length of the bar.
-		percent = (b.percent * 0.01) * float64(b.Length)
-
-		// Calculate how many charachters the parameter RatingBar currently holds.
-		currentProgress := []rune(b.Graph)
-
-		// Calculates how many characters to update the bar with,
-		// based on how many characters it had the last update.
-		progressSinceLast := int(percent) - len(currentProgress)
-
-		// Uppdates the progress in the RatingBar-parameter.
-		for i := 0; i < progressSinceLast; i++ {
-			b.Graph += b.Char
-		}
-
-		// Converts the variable Legth along with the length of the color-declaration to a string so it can be used in the below printf
-		var l string
-		l = strconv.Itoa(b.Length + 21 /*21*/)
-
-		// Sets the color to the right parameters.
-		desc := color.HEX(b.DescriptionColor, false).Sprint(b.Description)
-		gra := color.HEX(b.GraphColor, false).Sprint(b.Graph)
-		per := color.HEX(b.PercentColor, false).Sprint(int(b.percent))
-		cur := color.HEX(b.CurrentColor, false).Sprint(b.Current)
-		tot := color.HEX(b.TotalColor, false).Sprint(b.Total)
-
-		if e.Seconds() > 60.00 {
-			min := e.Seconds() * inverseSixty
-			sec := int(e.Seconds()) % 60
-			estTime := color.HEX(b.EstimatedColor, false).Sprintf("estimated time: %.0fmin %ds ", min, sec)
-			fmt.Printf("\r %s |%-"+l+"s|%s%% %s/%s estimated time: %.2fmin ", desc, gra, per, cur, tot, estTime)
-		} else {
-			if e.Seconds() >= 0 {
-				estTime := color.HEX(b.EstimatedColor, false).Sprintf("estimated time: %0.1fs ", e.Seconds())
-				color.Printf("\r %s |%-"+l+"s|%s%% %s/%s %s", desc, gra, per, cur, tot, estTime)
-			}
-		}
-
-		if b.Current == b.Total {
-			b.elapsedTime = time.Since(b.startTime)
-			color.HEX(b.ElapsedColor, false).Println("\nTime elapsed: ", b.elapsedTime, "\n")
-			b.isRunning = false
-		}
-
-	}
 }

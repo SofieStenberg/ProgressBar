@@ -51,7 +51,7 @@ func main() {
 	b.Reset(1000)
 	b.Description = "Foor-loop 1'000"
 	for i := 0; i <= b.Total; i++ {
-		time.Sleep(1 * time.Nanosecond)
+		time.Sleep(75 * time.Millisecond)
 		b.Update(i)
 	}
 
@@ -59,7 +59,7 @@ func main() {
 	b.Description = "Pipeline 1'000"
 	b.Char = "@"
 	for i := 0; i <= b.Total; i++ {
-		time.Sleep(1 * time.Nanosecond)
+		time.Sleep(75 * time.Millisecond)
 		b.UpdatePipeline(1)
 	}
 	/*
