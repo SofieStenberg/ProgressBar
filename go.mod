@@ -1,4 +1,4 @@
-module progressbar //github.com/SofieStenberg/ProgressBar        progressbar
+module github.com/SofieStenberg/ProgressBar
 
 go 1.15
 
