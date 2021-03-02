@@ -99,7 +99,6 @@ func TestPipe10000(t *testing.T) {
 	}
 }
 
-/*
 func TestNorm100000(t *testing.T) {
 	b := progressbar.Create(100000)
 	b.Description = "Foor-loop 100'000"
@@ -124,15 +123,13 @@ func TestPipe100000(t *testing.T) {
 		t.Error("Last current expected to be {}, but were {}", b.Total, b.Current)
 	}
 }
-*/
+
 func TestReset(t *testing.T) {
 	b := progressbar.Create(50)
 	b.Length = 75
 	b.Char = "$"
 	b.Current = 49
 	b.GraphColor = "#c3272b"
-
-	b.Current = 49
 
 	expLength := 50
 	expChar := "█"
