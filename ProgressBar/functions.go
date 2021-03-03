@@ -9,26 +9,6 @@ import (
 	"github.com/gookit/color"
 )
 
-/*
-	This package contains the functions to display a progressbar.
-	Start by using progressbar.CreateProgressBar(maxValue float64) to get a progressbar instance.
-	The 'maxValue' is how many iterations the function is supposed to go through.
-	This is a required parameter that must be passed for the bar to be able to calculate the progress.
-
-	The bar initializes with default parameters, but some of these can be changed in order to
-	customize the bar according to own preferences.
-
-	With the call		instance.Description	 You can add a string with a description of the bar.
-
-	With the call		instace.Length			 You change the length of the displayed bar in the terminal.
-												 Keep in mind that this variable must be a string.
-
-	With the call		instance.Graph			 You can change the char that makes the bar progress
-
-	You can also custumize the colors on the output. This is done with the HEX value of the color you want to use.
-	If you want to change color on the description output, simple do: instance.DescriptionColor = "HEX-value".
-	Remember, the hex-value must be a string and start with #. All the variables that you can change the color for, ends with xxxColor
-*/
 // Used instead of divide by 60 as multiplication is faster than division.
 const inverseSixty float64 = 0.01666666666666666666666666666667
 
@@ -114,7 +94,12 @@ func (b *ProgressBar) estimation() time.Duration {
 	return time.Duration(int64(timeLeft))
 }
 
-func stopTime(b *ProgressBar) {
+func startTimer(b *ProgressBar) {
+	b.startTime = time.Now()
+	b.isRunning = true
+}
+
+func stopTimer(b *ProgressBar) {
 
 	if b.Current == b.Total {
 		b.elapsedTime = time.Since(b.startTime)
@@ -130,8 +115,7 @@ func (b *ProgressBar) Update(i int) {
 
 	// If at the beginning of the process, the timer starts.
 	if !b.isRunning {
-		b.startTime = time.Now()
-		b.isRunning = true
+		startTimer(b)
 	}
 
 	uppdateBar(b)
@@ -139,7 +123,7 @@ func (b *ProgressBar) Update(i int) {
 
 	// If the process is att 100%, a.k.a finished, the timer stops.
 	if b.Current == b.Total {
-		stopTime(b)
+		stopTimer(b)
 	}
 }
 
@@ -239,6 +223,6 @@ func (b *ProgressBar) receive(ch <-chan int) {
 
 	// If the process is att 100%, a.k.a finished, the timer stops.
 	if b.Current == b.Total {
-		stopTime(b)
+		stopTimer(b)
 	}
 }

@@ -1,6 +1,9 @@
-// Run this testfile by typing;
-// 'go test'
-// in the terminal
+/* 	Run this testfile by typing in the terminal;
+ 	'go test'
+
+	To run all the benchmarks in the test, typ in the terminal:
+	'go test -bench=.
+*/
 
 package main
 
@@ -12,12 +15,12 @@ import (
 
 func TestNorm100(t *testing.T) {
 	b := progressbar.Create(100)
-	b.Description = "Foor-loop 40"
+	b.Description = "Foor-loop 100"
 	for i := 0; i <= b.Total; i++ {
 		/*
 			The sleep here is to illustrate some work to be done inside the loop
 		*/
-		time.Sleep(5 * time.Millisecond)
+		time.Sleep(20 * time.Millisecond)
 		b.Update(i)
 	}
 
@@ -28,11 +31,11 @@ func TestNorm100(t *testing.T) {
 
 func TestPipe100(t *testing.T) {
 	b := progressbar.Create(100)
-	b.Description = "Pipeline 40"
+	b.Description = "Pipeline 100"
 	b.Char = "@"
 	for i := 0; i <= b.Total; i++ {
 
-		time.Sleep(5 * time.Millisecond)
+		time.Sleep(20 * time.Millisecond)
 		b.UpdatePipeline(i)
 	}
 
@@ -48,7 +51,7 @@ func TestNorm1000(t *testing.T) {
 	b.GraphColor = "#fa7b62"
 	b.DescriptionColor = "#801dae"
 	for i := 0; i <= b.Total; i += 10 {
-		time.Sleep(25 * time.Nanosecond)
+		time.Sleep(10 * time.Millisecond)
 		b.Update(i)
 	}
 
@@ -65,7 +68,7 @@ func TestPipe1000(t *testing.T) {
 	b.Char = "@"
 	for i := 0; i <= b.Total; i += 10 {
 
-		time.Sleep(25 * time.Nanosecond)
+		time.Sleep(10 * time.Millisecond)
 		b.UpdatePipeline(i)
 	}
 
@@ -153,4 +156,28 @@ func TestReset(t *testing.T) {
 		t.Error("Expected char: {}, but was: {}", expColor, b.GraphColor)
 	}
 
+}
+
+func BenchmarkUpdate(b *testing.B) {
+	p := progressbar.Create(b.N)
+	for i := 0; i < b.N; i++ {
+		p.Update(i)
+	}
+}
+
+func BenchmarkUpdatePipeline(b *testing.B) {
+	p := progressbar.Create(b.N)
+	for i := 0; i < b.N; i++ {
+		p.UpdatePipeline(i)
+	}
+}
+
+func BenchmarkReset(b *testing.B) {
+	p := progressbar.Create(50)
+	p.Description = "Testing"
+	p.Current = 25
+	p.Length = 100
+	for i := 0; i < b.N; i++ {
+		p.Reset(50)
+	}
 }
