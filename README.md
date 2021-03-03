@@ -8,7 +8,10 @@ import (progressbar "github.com/SofieStenberg/ProgressBar/ProgressBar")
 
 b := progessbar.Create(tot int)
 for i :=0; i <= tot; i++ {
-    
+    /*
+		Do something
+	*/
+	
     b.Update(i) 
 }
 
