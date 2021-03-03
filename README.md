@@ -2,10 +2,10 @@
 
 Install:
 
-go get github.com/SofieStenberg/ProgressBar/ProgressBar
+`go get github.com/SofieStenberg/ProgressBar/ProgressBar`
 
 Usage:
-
+```
 import (progressbar "github.com/SofieStenberg/ProgressBar/ProgressBar")
 
 b := progessbar.Create(tot int)
@@ -17,7 +17,7 @@ for i :=0; i <= tot; i++ {
 	
     b.Update(i) 
 }
-
+```
 
 This Golang package contains the functions to display a progressbar.
 Start by using progressbar.CreateProgressBar(maxValue float64) to get a progressbar instance.
