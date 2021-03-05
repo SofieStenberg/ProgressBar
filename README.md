@@ -10,7 +10,6 @@ import (progressbar "github.com/SofieStenberg/ProgressBar/ProgressBar")
 
 b := progessbar.Create(tot int)
 for i :=0; i <= tot; i++ {
-
     /*
 	Do something
     */
@@ -20,23 +19,23 @@ for i :=0; i <= tot; i++ {
 ```
 
 This Golang package contains the functions to display a progressbar.
-Start by using progressbar.CreateProgressBar(maxValue float64) to get a progressbar instance.
+Start by using `progressbar.CreateProgressBar(maxValue float64)` to get a progressbar instance.
 The 'maxValue' is how many iterations the function is supposed to go through.
 This is a required parameter that must be passed for the bar to be able to calculate the progress.
 
-If you want to use the solution with pipelines, you create the bar as previous, but update with instance.UpdatePipeline.
+If you want to use the solution with pipelines, you create the bar as previous, but update with `instance.UpdatePipeline`.
 
 The bar initializes with default parameters, but some of these can be changed in order to
 customize the bar according to own preferences.
 
-With the call		`instance.Description`	    You can add a string with a description of the bar.
+You can add a string with a description of the bar. `instance.Description = ""`	    
 
-With the call		`instace.Length`	        You change the length of the displayed bar in the terminal.
-            										Keep in mind that this variable must be a string.
+You change the length of the displayed bar in the terminal. Must be an integer. `instace.Length = i`	        
+            										
 
-With the call		`instance.Char`			    You can change the char that makes the bar progress
+You can change the character that makes the bar progress. Can be any character, but must be a string- `instance.Char = "$"`			    
 
-You can also custumize the colors on the output. There are seven different parameters that you can change the color for;
+You can also custumize the colors on the output. There are seven different parameters that you can change the color for;\
 instance.DescriptionColor\
 instance.GraphColor\
 instance.PercentColor\
