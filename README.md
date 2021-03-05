@@ -52,4 +52,4 @@ It must be a string and it must start with #. For example;\
 Result \
 ![](./screenshot/progressing.PNG)
 
-![](.\screenshot\finished.PNG)
+![](./screenshot/finished.PNG)
