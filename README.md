@@ -18,6 +18,11 @@ for i :=0; i <= tot; i++ {
 }
 ```
 
+Result \
+![](./screenshot/progressing.PNG)
+
+![](./screenshot/finished.PNG)
+
 This Golang package contains the functions to display a progressbar.
 Start by using `progressbar.CreateProgressBar(maxValue float64)` to get a progressbar instance.
 The 'maxValue' is how many iterations the function is supposed to go through.
@@ -48,8 +53,3 @@ instance.ElapsedColor
 To change the color you set the parameter to the hex-value of the of the color you want. 
 It must be a string and it must start with #. For example;\
 `b.DescriptionColor = "#44cef6" `
-
-Result \
-![](./screenshot/progressing.PNG)
-
-![](./screenshot/finished.PNG)
