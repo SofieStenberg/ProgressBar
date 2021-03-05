@@ -50,6 +50,6 @@ It must be a string and it must start with #. For example;\
 `b.DescriptionColor = "#44cef6" `
 
 Result \
-![Screenshot](.\screenshot\progressing.PNG)
+![](./screenshot/progressing.PNG)
 
 ![](.\screenshot\finished.PNG)
