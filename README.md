@@ -29,23 +29,23 @@ If you want to use the solution with pipelines, you create the bar as previous, 
 The bar initializes with default parameters, but some of these can be changed in order to
 customize the bar according to own preferences.
 
-With the call		`instance.Description`	 You can add a string with a description of the bar.
+With the call		`instance.Description`	    You can add a string with a description of the bar.
 
-With the call		`instace.Length`			 You change the length of the displayed bar in the terminal.
-            												 Keep in mind that this variable must be a string.
+With the call		`instace.Length`	        You change the length of the displayed bar in the terminal.
+            										Keep in mind that this variable must be a string.
 
-With the call		`instance.Char`			 You can change the char that makes the bar progress
+With the call		`instance.Char`			    You can change the char that makes the bar progress
 
 You can also custumize the colors on the output. There are seven different parameters that you can change the color for;
-instance.DescriptionColor
-instance.GraphColor
-instance.PercentColor
-instance.CurrentColor
-instance.TotalColor
-instance.EstimatedColor
-instance.ElapsedColor
+instance.DescriptionColor\
+instance.GraphColor\
+instance.PercentColor\
+instance.CurrentColor\
+instance.TotalColor\
+instance.EstimatedColor\
+instance.ElapsedColor\
 
 To change the color you set the parameter to the hex-value of the of the color you want. 
-It must be a string and it must start with #. For example;
+It must be a string and it must start with #. For example;\
 `b.DescriptionColor = "#44cef6" `
 
