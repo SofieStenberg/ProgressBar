@@ -1,4 +1,5 @@
-// Package progressbar contains struct and functions for the progress bar
+// Package progressbar contains struct and functions for the progress bar.
+// The progressbar shows the progress while iterating through a foor-loop.
 package progressbar
 
 import (
@@ -12,7 +13,8 @@ import (
 // Used instead of divide by 60 as multiplication is faster than division.
 const inverseSixty float64 = 0.01666666666666666666666666666667
 
-// ProgressBar is the struct containing the parameters for the progress bar
+// ProgressBar is the struct containing the parameters nedded
+// for the progress bar to be run.
 type ProgressBar struct {
 	percent       float64       // The percentage of the progress.
 	Current       int           // Keep track of the value of where in the loop the process is.
@@ -24,10 +26,10 @@ type ProgressBar struct {
 	Length        int           // The length of the bar (How many chars long the bar should be).
 	startTime     time.Time     // Marks the time when the progress bar starts.
 	elapsedTime   time.Duration // Marks how long time it has been since 'start'.
-	estimatedTime time.Duration // Used to get an estimated time of how long time is left of the progress
-	isRunning     bool          //	Used to know when to start the timer
+	estimatedTime time.Duration // Used to get an estimated time of how long time is left of the progress.
+	isRunning     bool          //	Used to know when to start the timer.
 
-	// The below variables is for holding the HEX-value in order to get a colored output
+	// The below variables is for holding the HEX-value in order to get a colored output.
 	DescriptionColor string
 	CurrentColor     string
 	TotalColor       string
@@ -77,7 +79,7 @@ func (b *ProgressBar) Reset(n int) {
 	Default(b, n)
 }
 
-// calculatePercent is used to calculate the percentage of the progress.
+// calculatePercent is used to calculate the percentage of the progress that is finished.
 func calculatePercent(b *ProgressBar) float64 {
 	val := float64(b.Current) * b.totalInverse
 	per := math.Min(val*100, 100)
@@ -85,6 +87,8 @@ func calculatePercent(b *ProgressBar) float64 {
 }
 
 // Estimation is a function that calculates the estimated time left of the progress.
+// This is based on how long time each iteration takes, how many iterations have been done
+// and how many iterations is left.
 func (b *ProgressBar) estimation() time.Duration {
 	elap := time.Since(b.startTime)                                // elapsed time
 	iter := float64(b.Total) * (1 - float64(b.percent)/100)        // iterations left
@@ -94,11 +98,13 @@ func (b *ProgressBar) estimation() time.Duration {
 	return time.Duration(int64(timeLeft))
 }
 
+// Starts the timer.
 func startTimer(b *ProgressBar) {
 	b.startTime = time.Now()
 	b.isRunning = true
 }
 
+// Stops the timer and print out the elapsed time.
 func stopTimer(b *ProgressBar) {
 
 	if b.Current == b.Total {
@@ -127,19 +133,19 @@ func (b *ProgressBar) Update(i int) {
 	}
 }
 
-// uppdateBar is the function that draws the progressbar to the terminal.
+// uppdateBar is the function that make the necessary calculations
+// needed to update the parameters of the bar.
 func uppdateBar(b *ProgressBar) {
 	// Calculation of the current progress in percent.
 	b.percent = calculatePercent(b)
-	//e := b.estimation()
 	var percent float64
 
-	// As long the 'Percent'-parameter is below 100%, we update the bar.
+	// As long the 'percent'-parameter is below 100%, we update the bar.
 	if b.percent <= 100 {
 		// Calculates how many chars to update the bar with based on the length of the bar.
 		percent = (b.percent * 0.01) * float64(b.Length)
 
-		// Calculate how many charachters the parameter RatingBar currently holds.
+		// Calculate how many charachters the parameter 'Graph' currently holds.
 		currentProgress := []rune(b.Graph)
 
 		// Calculates how many characters to update the bar with,
@@ -153,6 +159,8 @@ func uppdateBar(b *ProgressBar) {
 	}
 }
 
+// DrawBar is the function that sets the colors to the parameters
+// and then prints out the updated bar in the terminal.
 func drawBar(b *ProgressBar) {
 	// Get the estimated time left of the progress.
 	e := b.estimation()
@@ -167,8 +175,9 @@ func drawBar(b *ProgressBar) {
 	tot := color.HEX(b.TotalColor, false).Sprint(b.Total)
 
 	if e.Seconds() > 60.00 {
-		// If over a minute we need to calculate the exact minirues and seconds in order
-		// to get the rith output before we sett the color to this parameter.
+		// If the estimated time left is over a minute, we need to calculate the
+		// exact minutes and seconds in order to get the rith output before we set
+		// the color to this parameter.
 		min := e.Seconds() * inverseSixty
 		sec := int(e.Seconds()) % 60
 		estTime := color.HEX(b.EstimatedColor, false).Sprintf("estimated time: %.0fmin %ds ", min, sec)
@@ -194,10 +203,12 @@ func drawBar(b *ProgressBar) {
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 */
 
-// UpdatePipeline is the function called when the user wants to use the progressbar
-// that is implemented with pipeline. It sends the updated progress through a channel
+// UpdatePipeline is the function called when the user wants to use the progressbar that is
+// implemented with pipeline. It sends the values of the current iteration through a channel.
 func (b *ProgressBar) UpdatePipeline(i int) {
+	// The channel is created.
 	out := make(chan int)
+	// We send the value through the channel.
 	go func() {
 		out <- i
 		close(out)
@@ -205,12 +216,15 @@ func (b *ProgressBar) UpdatePipeline(i int) {
 	b.receive(out)
 }
 
-// receive is the function that updates the current state of the progress based on the value sent from the channel.
-// It then calls the function to draw the grahp.
+// receive is the function that updates the current state of the progress
+// based on the value sent from the channel. It then calls the function to draw the grahp.
 func (b *ProgressBar) receive(ch <-chan int) {
+	// Pick up the next value from the channel and update
+	// the 'Current'-parameter
 	n := <-ch
 	b.Current = n
 
+	// Start the timer if we are at the beginning of the iterations.
 	go func() {
 		if !b.isRunning {
 			b.startTime = time.Now()
@@ -218,6 +232,8 @@ func (b *ProgressBar) receive(ch <-chan int) {
 		}
 	}()
 
+	// We call the functions updateBar and drawBar, which are the same functions
+	// used in the solution above.
 	uppdateBar(b)
 	drawBar(b)
 
