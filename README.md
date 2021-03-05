@@ -24,7 +24,7 @@ Result \
 ![](./screenshot/finished.PNG)
 
 This Golang package contains the functions to display a progressbar.
-Start by using `progressbar.CreateProgressBar(maxValue float64)` to get a progressbar instance.
+Start by using `progressbar.CreateProgressBar(maxValue int)` to get a progressbar instance.
 The 'maxValue' is how many iterations the function is supposed to go through.
 This is a required parameter that must be passed for the bar to be able to calculate the progress.
 
