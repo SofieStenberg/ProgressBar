@@ -49,3 +49,7 @@ To change the color you set the parameter to the hex-value of the of the color y
 It must be a string and it must start with #. For example;\
 `b.DescriptionColor = "#44cef6" `
 
+Result \
+![Screenshot](E:\BTH\DVGHI\SecondYear\SecondTerm\PA1546_Individuellt_mjukvaruutvecklingsprojekt\progressing.PNG)
+
+![Screenshot](E:\BTH\DVGHI\SecondYear\SecondTerm\PA1546_Individuellt_mjukvaruutvecklingsprojekt\finished.PNG)
