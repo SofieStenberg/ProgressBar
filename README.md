@@ -33,7 +33,7 @@ You can add a string with a description of the bar. `instance.Description = ""`
 You change the length of the displayed bar in the terminal. Must be an integer. `instace.Length = i`	        
             										
 
-You can change the character that makes the bar progress. Can be any character, but must be a string. \ `instance.Char = "$"`			    
+You can change the character that makes the bar progress. Can be any character, but must be a string.  `instance.Char = "$"`			    
 
 You can also custumize the colors on the output. There are seven different parameters that you can change the color for;\
 instance.DescriptionColor\
@@ -42,7 +42,7 @@ instance.PercentColor\
 instance.CurrentColor\
 instance.TotalColor\
 instance.EstimatedColor\
-instance.ElapsedColor\
+instance.ElapsedColor
 
 To change the color you set the parameter to the hex-value of the of the color you want. 
 It must be a string and it must start with #. For example;\
