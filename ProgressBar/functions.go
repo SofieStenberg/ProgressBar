@@ -74,9 +74,11 @@ func Create(n int) *ProgressBar {
 	return b
 }
 
-// Reset resets the bar to the default values.
+// Reset resets the nessecary paramters to be able to run the bar again.
 func (b *ProgressBar) Reset(n int) {
-	Default(b, n)
+	b.Total = n
+	b.Graph = ""
+	b.Current = 0
 }
 
 // calculatePercent is used to calculate the percentage of the progress that is finished.

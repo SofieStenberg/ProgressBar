@@ -50,6 +50,8 @@ func TestNorm1000(t *testing.T) {
 	b.Length = 50
 	b.GraphColor = "#fa7b62"
 	b.DescriptionColor = "#801dae"
+	b.Current = 999
+	b.Reset(1000)
 	for i := 0; i <= b.Total; i += 10 {
 		time.Sleep(10 * time.Millisecond)
 		b.Update(i)
@@ -133,29 +135,24 @@ func TestReset(t *testing.T) {
 	b.Char = "$"
 	b.Current = 49
 	b.GraphColor = "#c3272b"
-
-	expLength := 50
-	expChar := "█"
-	expCurr := 0
-	expColor := "#0eb83a"
+	b.Graph = "$$$$"
 
 	b.Reset(50)
 
-	if b.Length != expLength {
-		t.Error("Expected length: {}, but was: {}", expLength, b.Length)
+	expCurr := 0
+	expGraph := ""
+
+	if b.GraphColor != "#c3272b" {
+		t.Error("Expected char: {}, but was: {}", "#c3272b", b.GraphColor)
 	}
-	if b.Char != expChar {
-		t.Error("Expected char: {}, but was: {}", expChar, b.Char)
+
+	if b.Graph != expGraph {
+		t.Error("Expected char: {}, but was: {}", expGraph, b.Graph)
 	}
 
 	if b.Current != expCurr {
 		t.Error("Expected char: {}, but was: {}", expCurr, b.Current)
 	}
-
-	if b.GraphColor != expColor {
-		t.Error("Expected char: {}, but was: {}", expColor, b.GraphColor)
-	}
-
 }
 
 func BenchmarkUpdate(b *testing.B) {

@@ -24,11 +24,14 @@ Result \
 ![](./screenshot/finished.PNG)
 
 This Golang package contains the functions to display a progressbar.
-Start by using `progressbar.CreateProgressBar(maxValue int)` to get a progressbar instance.
+Start by using `progressbar.CreateProgressBar(tot int)` to get a progressbar instance.
 The 'maxValue' is how many iterations the function is supposed to go through.
 This is a required parameter that must be passed for the bar to be able to calculate the progress.
 
 If you want to use the solution with pipelines, you create the bar as previous, but update with `instance.UpdatePipeline`.
+
+You can reset the parameters of the bar in order to use it again later. Any changes in the customizable parameters will
+remian as they were. When reseting the bar you will have to provide a new integer for the total value. `instance.Reset(tot int)`
 
 The bar initializes with default parameters, but some of these can be changed in order to
 customize the bar according to own preferences.
